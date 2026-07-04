@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="/assets/css/colors.css" id="css-theme-link">
     <link rel="stylesheet" href="/assets/css/elements.css">
     <link rel="stylesheet" href="/assets/css/font.css">
-    <link rel="stylesheet" href="/assets/icons/fonts/remixicon.css">
     <script src="/assets/js/lib/particles.js"></script>
     <script src="/baremux/index.js"></script>
     <script src="/assets/js/colors.js"></script>
     <script src="/homework/math.all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/lucide.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/eruda@3.4.3/eruda.min.js"></script>
     <script>
         async function swium() {
@@ -30,6 +30,7 @@
 
         window.addEventListener("load", () => {
             swium();
+            if (window.lucide) setTimeout(() => lucide.createIcons(), 0);
         });
     </script>
     <script src="/assets/js/browserfunctions.js"></script>
@@ -232,29 +233,29 @@
         <div class="browser-controls">
             <div class="tabs">
                 <button class="newtab" onclick="newTab()">
-                    <i class="ri-add-line ri"></i>
+                    <i data-lucide="plus"></i>
                 </button>
             </div>
             <div class="browser-buttons">
                 <div class="hcontainer">
                     <button onclick="b()">
-                        <i class="ri-arrow-left-line ri"></i>
+                        <i data-lucide="chevron-left"></i>
                     </button>
                     <button onclick="f()">
-                        <i class="ri-arrow-right-line ri"></i>
+                        <i data-lucide="chevron-right"></i>
                     </button>
                     <button onclick="r()">
-                        <i class="ri-restart-line ri"></i>
+                        <i data-lucide="rotate-ccw"></i>
                     </button>
                     <input type="text" id="searchbar" placeholder="Search for anything or enter a URL...">
                     <button onclick="full()">
-                        <i class="ri-fullscreen-line ri"></i>
+                        <i data-lucide="maximize"></i>
                     </button>
                     <button onclick="eruda.init(); this.querySelector('i').style.color='var(--accent)';">
-                        <i class="ri-code-line ri"></i>
+                        <i data-lucide="code"></i>
                     </button>
                     <button onclick="location.href = '/'">
-                        <i class="ri-home-4-line ri"></i>
+                        <i data-lucide="home"></i>
                     </button>
                 </div>
             </div>
