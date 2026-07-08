@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waves</title>
+  <link rel="stylesheet" href="styles/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="status-bar">
+      <div class="status-item">
+        <i class="fas fa-cloud"></i>
+        <span>no°</span>
+      </div>
+      <div class="status-item">
+        <i class="fas fa-battery-full"></i>
+        <span>no</span>
+      </div>
+      <div class="status-item">
+        <span>no</span>
+      </div>
+    </div>
 
+    <div class="main-content">
+      <h1 class="main-title">Waves</h1>
+      <p class="tagline">hitting the breaks with this one</p>
+    </div>
+
+    <div class="bottom-left">
+      <button class="home-toggle" id="navToggle">
+        <i class="fas fa-home"></i>
+      </button>
+      <nav class="nav-modal" id="navModal">
+        <div class="nav-item">
+          <i class="fas fa-user"></i>
+          <span>Account</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-brain"></i>
+          <span>AI</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-comments"></i>
+          <span>Chat</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-eye"></i>
+          <span>Watch</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-music"></i>
+          <span>Music</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-compass"></i>
+          <span>Browse</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-gamepad"></i>
+          <span>Games</span>
+        </div>
+      </nav>
+      <div class="utility-buttons">
+        <button class="util-btn" title="Settings">
+          <i class="fas fa-sliders-h"></i>
+        </button>
+        <button class="util-btn" title="Magic">
+          <i class="fas fa-wand-magic-sparkles"></i>
+        </button>
+        <button class="util-btn" title="Trophy">
+          <i class="fas fa-trophy"></i>
+        </button>
+        <button class="util-btn" title="Users">
+          <i class="fas fa-users-gear"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="bottom-right">
+      <button class="premium-btn">
+        <i class="fas fa-crown"></i>
+        <span>Premium</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const navToggle = document.getElementById('navToggle');
+    const navModal = document.getElementById('navModal');
+
+    navToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      navModal.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!navToggle.contains(e.target) && !navModal.contains(e.target)) {
+        navModal.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
