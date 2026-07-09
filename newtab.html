@@ -1,34 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <link rel="icon" type="image/svg+xml" href="/assets/fav.png">
-    <title>waves.</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="/uv/uv.bundle.js"></script>
-    <script src="/uv/uv.config.js"></script>
-    <script src="/baremux/index.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/lucide.min.js"></script>
-    <script src="/assets/js/t.js" defer></script>
-    <script src="/homework/math.all.js"></script>
-    <link rel="stylesheet" href="/styles/index.css">
-    <link rel="stylesheet" href="/assets/css/t.css">
-    <link rel="stylesheet" href="/assets/css/dropdown.css">
-    <link rel="stylesheet" href="/assets/css/colors.css" id="css-theme-link">
-    <script src="/assets/js/colors.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <link rel="stylesheet" href="/assets/css/font.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waves | Home</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/fav.png">
+  <link rel="stylesheet" href="/styles/index.css">
+  <link rel="stylesheet" href="/assets/css/colors.css" id="css-theme-link">
+  <link rel="stylesheet" href="/assets/css/font.css">
+  <script src="/uv/uv.bundle.js"></script>
+  <script src="/uv/uv.config.js"></script>
+  <script src="/baremux/index.js"></script>
+  <script src="/homework/math.all.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/lucide.min.js"></script>
+  <script src="/assets/js/t.js" defer></script>
 </head>
-
 <body>
-    <div id="homeContent">
-        <h1 class="text-8xl text-white font-bold">hi!</h1>
-        <p style="color: var(--text) !important;">try searching to get started.</p>
+  <div class="container">
+    <div class="status-bar">
+      <div class="status-item">
+        <i data-lucide="clock"></i>
+        <span id="timeDisplay">--:--</span>
+      </div>
+      <div class="status-item">
+        <i data-lucide="battery-full" id="batteryIcon"></i>
+        <span id="batteryDisplay">100%</span>
+      </div>
+      <div class="status-item">
+        <span>ready</span>
+      </div>
     </div>
 
-    
-</body>
+    <div class="main-content">
+      <h1 class="main-title">Waves</h1>
+      <p class="tagline">Your browser home is ready. Search or open a site to begin.</p>
+    </div>
 
+    <div class="bottom-left" id="leftPanel">
+      <div class="nav-modal" id="navModal">
+        <button class="home-toggle" id="navToggle" type="button">
+          <span class="home-icon"><i data-lucide="house"></i></span>
+          <span class="home-label">Home</span>
+        </button>
+        <div class="nav-items">
+          <a class="nav-item" href="/index.html"><i data-lucide="house"></i><span>Home</span></a>
+          <a class="nav-item" href="/pages/ai.html"><i data-lucide="brain-circuit"></i><span>AI</span></a>
+          <a class="nav-item" href="/pages/chat.html"><i data-lucide="messages-square"></i><span>Chat</span></a>
+          <a class="nav-item" href="/pages/watch.html"><i data-lucide="eye"></i><span>Watch</span></a>
+          <a class="nav-item" href="/pages/music.html"><i data-lucide="music"></i><span>Music</span></a>
+          <a class="nav-item" href="/pages/browser.html"><i data-lucide="compass"></i><span>Browse</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const timeDisplay = document.getElementById('timeDisplay');
+    const batteryDisplay = document.getElementById('batteryDisplay');
+    const batteryIcon = document.getElementById('batteryIcon');
+
+    function updateTime() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      if (timeDisplay) timeDisplay.textContent = `${hours}:${minutes}`;
+    }
+
+    function updateBatteryLevel(level) {
+      const pct = Math.round(level * 100);
+      if (batteryDisplay) batteryDisplay.textContent = `${pct}%`;
+      if (batteryIcon) {
+        if (pct > 75) batteryIcon.setAttribute('data-lucide', 'battery-full');
+        else if (pct > 50) batteryIcon.setAttribute('data-lucide', 'battery-medium');
+        else if (pct > 25) batteryIcon.setAttribute('data-lucide', 'battery-low');
+        else batteryIcon.setAttribute('data-lucide', 'battery-empty');
+        if (window.lucide) lucide.createIcons({ parent: batteryIcon.parentElement });
+      }
+    }
+
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    if ('getBattery' in navigator) {
+      navigator.getBattery().then((battery) => {
+        updateBatteryLevel(battery.level);
+        battery.addEventListener('levelchange', () => updateBatteryLevel(battery.level));
+        battery.addEventListener('chargingchange', () => updateBatteryLevel(battery.level));
+      });
+    }
+
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
+  <script src="/assets/js/nav.js" defer></script>
+</body>
 </html>

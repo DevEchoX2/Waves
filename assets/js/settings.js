@@ -1,19 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const allPages = document.querySelectorAll('.settings-page');
-  const allButtons = document.querySelectorAll('.settings-section');
+  const cards = document.querySelectorAll('.settings-card');
+  const buttons = document.querySelectorAll('.settings-item');
 
   function switchSettingsPage(target) {
-    allPages.forEach(page => {
-      page.classList.toggle('settings-active', page.id === `settings-${target}`);
+    cards.forEach((card) => {
+      const isActive = card.id === `settings-${target}`;
+      card.classList.toggle('hidden', !isActive);
     });
-    allButtons.forEach(button => {
-      button.classList.toggle('settings-active', button.dataset.target === target);
+
+    buttons.forEach((button) => {
+      button.classList.toggle('active', button.dataset.target === target);
     });
   }
 
   window.switchSettingsPage = switchSettingsPage;
 
-  document.querySelectorAll('.settings-section').forEach(button => {
+  buttons.forEach((button) => {
     button.addEventListener('click', () => {
       switchSettingsPage(button.dataset.target);
     });
