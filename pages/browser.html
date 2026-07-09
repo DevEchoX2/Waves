@@ -57,18 +57,20 @@
     </div>
 
     <div class="nav-logo">
-        <img src="/assets/fav.png" alt="" onclick="
-            ul.classList.add('active');
-            const blurr = document.createElement('div')
-            blurr.classList.add('bluroverlay')
-            document.body.append(blurr)
-            blurr.addEventListener('click', () => {
-                ul.classList.remove('active')
-                blurr.remove()
-            })
+        <img src="/assets/fav.png" alt="Logo" onclick="
+            const ul = document.querySelector('.nav-items');
+            if(ul) {
+                ul.classList.add('active');
+                const blurr = document.createElement('div');
+                blurr.classList.add('bluroverlay');
+                document.body.append(blurr);
+                blurr.addEventListener('click', () => {
+                    ul.classList.remove('active');
+                    blurr.remove();
+                });
+            }
         ">
     </div>
-
 
     <div class="browser-container">
         <div class="browser-controls">
@@ -79,23 +81,23 @@
             </div>
             <div class="browser-buttons">
                 <div class="hcontainer">
-                    <button onclick="b()">
+                    <button onclick="b()" title="Back">
                         <i data-lucide="chevron-left"></i>
                     </button>
-                    <button onclick="f()">
+                    <button onclick="f()" title="Forward">
                         <i data-lucide="chevron-right"></i>
                     </button>
-                    <button onclick="r()">
+                    <button onclick="r()" title="Reload">
                         <i data-lucide="rotate-ccw"></i>
                     </button>
                     <input type="text" id="searchbar" placeholder="Search for anything or enter a URL...">
-                    <button onclick="full()">
+                    <button onclick="full()" title="Fullscreen">
                         <i data-lucide="maximize"></i>
                     </button>
-                    <button onclick="eruda.init(); this.querySelector('i').style.color='var(--accent)';">
+                    <button onclick="launchEruda()" title="Developer Tools">
                         <i data-lucide="code"></i>
                     </button>
-                    <button onclick="location.href = '/'">
+                    <button onclick="location.href = '/'" title="Exit to Home">
                         <i data-lucide="home"></i>
                     </button>
                 </div>
@@ -106,7 +108,12 @@
 
     <script src="/assets/js/nav.js" defer></script>
     <script defer>
-        newTab()
+        // Make sure the application initializes a tab on startup once scripts load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof newTab === 'function') {
+                newTab();
+            }
+        });
     </script>
-    </body>
+</body>
 </html>
