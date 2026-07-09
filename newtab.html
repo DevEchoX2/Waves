@@ -8,14 +8,14 @@
   <link rel="stylesheet" href="/styles/index.css">
   <link rel="stylesheet" href="/assets/css/colors.css" id="css-theme-link">
   <link rel="stylesheet" href="/assets/css/font.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  
   <script src="/uv/uv.bundle.js"></script>
   <script src="/uv/uv.config.js"></script>
   <script src="/baremux/index.js"></script>
   <script src="/homework/math.all.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/lucide.min.js"></script>
   <script src="/assets/js/t.js" defer></script>
   <style>
-    /* Styling for the tab search input bar */
     .nt-search-container {
       margin-top: 24px;
       display: flex;
@@ -43,17 +43,22 @@
     .nt-search-bar::placeholder {
       color: rgba(148, 163, 184, 0.7);
     }
+
+    html:has(iframe) #leftPanel, 
+    body.in-frame #leftPanel {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="status-bar">
       <div class="status-item">
-        <i data-lucide="clock"></i>
+        <i class="fa-solid fa-clock"></i>
         <span id="timeDisplay">--:--</span>
       </div>
       <div class="status-item">
-        <i data-lucide="battery-full" id="batteryIcon"></i>
+        <i class="fa-solid fa-battery-full" id="batteryIcon"></i>
         <span id="batteryDisplay">100%</span>
       </div>
       <div class="status-item">
@@ -73,16 +78,16 @@
     <div class="bottom-left" id="leftPanel">
       <div class="nav-modal" id="navModal">
         <button class="home-toggle" id="navToggle" type="button">
-          <span class="home-icon"><i data-lucide="house"></i></span>
+          <span class="home-icon"><i class="fa-solid fa-house"></i></span>
           <span class="home-label">Home</span>
         </button>
         <div class="nav-items">
-          <a class="nav-item" href="/index.html"><i data-lucide="house"></i><span>Home</span></a>
-          <a class="nav-item" href="/pages/ai.html"><i data-lucide="brain-circuit"></i><span>AI</span></a>
-          <a class="nav-item" href="/pages/chat.html"><i data-lucide="messages-square"></i><span>Chat</span></a>
-          <a class="nav-item" href="/pages/watch.html"><i data-lucide="eye"></i><span>Watch</span></a>
-          <a class="nav-item" href="/pages/music.html"><i data-lucide="music"></i><span>Music</span></a>
-          <a class="nav-item" href="/pages/browser.html"><i data-lucide="compass"></i><span>Browse</span></a>
+          <a class="nav-item" href="/index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+          <a class="nav-item" href="/pages/ai.html"><i class="fa-solid fa-brain"></i><span>AI</span></a>
+          <a class="nav-item" href="/pages/chat.html"><i class="fa-solid fa-comments"></i><span>Chat</span></a>
+          <a class="nav-item" href="/pages/watch.html"><i class="fa-solid fa-eye"></i><span>Watch</span></a>
+          <a class="nav-item" href="/pages/music.html"><i class="fa-solid fa-music"></i><span>Music</span></a>
+          <a class="nav-item" href="/pages/browser.html"><i class="fa-solid fa-compass"></i><span>Browse</span></a>
         </div>
       </div>
     </div>
@@ -94,15 +99,16 @@
     const batteryIcon = document.getElementById('batteryIcon');
     const ntSearchbar = document.getElementById('ntSearchbar');
 
-    // Handle home tab navigation routing mechanics
+    if (window.self !== window.top) {
+      document.body.classList.add('in-frame');
+    }
+
     if (ntSearchbar) {
       ntSearchbar.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && ntSearchbar.value.trim()) {
-          // Check if page is inside the browser iframe container
           if (window.parent && typeof window.parent.nav === 'function') {
             window.parent.nav(ntSearchbar.value);
           } else {
-            // Fallback alternative if loaded solo outside iframe environment
             location.href = '/pages/browser.html?q=' + encodeURIComponent(ntSearchbar.value);
           }
         }
@@ -120,11 +126,11 @@
       const pct = Math.round(level * 100);
       if (batteryDisplay) batteryDisplay.textContent = `${pct}%`;
       if (batteryIcon) {
-        if (pct > 75) batteryIcon.setAttribute('data-lucide', 'battery-full');
-        else if (pct > 50) batteryIcon.setAttribute('data-lucide', 'battery-medium');
-        else if (pct > 25) batteryIcon.setAttribute('data-lucide', 'battery-low');
-        else batteryIcon.setAttribute('data-lucide', 'battery-empty');
-        if (window.lucide) lucide.createIcons({ parent: batteryIcon.parentElement });
+        batteryIcon.className = ''; // Reset classes
+        if (pct > 75) batteryIcon.className = 'fa-solid fa-battery-full';
+        else if (pct > 50) batteryIcon.className = 'fa-solid fa-battery-three-quarters';
+        else if (pct > 25) batteryIcon.className = 'fa-solid fa-battery-quarter';
+        else batteryIcon.className = 'fa-solid fa-battery-empty';
       }
     }
 
@@ -137,10 +143,6 @@
         battery.addEventListener('levelchange', () => updateBatteryLevel(battery.level));
         battery.addEventListener('chargingchange', () => updateBatteryLevel(battery.level));
       });
-    }
-
-    if (window.lucide) {
-      lucide.createIcons();
     }
   </script>
   <script src="/assets/js/nav.js" defer></script>
