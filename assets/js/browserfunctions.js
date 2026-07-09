@@ -59,12 +59,20 @@ function safeToast(type, text, icon) {
 window.addEventListener("DOMContentLoaded", () => {
   const searchbar = document.getElementById("searchbar");
   if (searchbar) {
-    searchbar.removeAttribute('onkeydown');
     searchbar.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         nav(searchbar.value);
       }
     });
+  }
+
+  // Intercept inbound home-page redirects seamlessly
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('q');
+  if (query) {
+    setTimeout(() => {
+      if (typeof nav === 'function') nav(query);
+    }, 400);
   }
 });
 
@@ -84,12 +92,14 @@ function newTab() {
   const ntBtn = document.querySelector(".newtab");
 
   const tabElement = document.createElement("div");
-  tabElement.classList.add("tab", "hcontainer");
+  tabElement.classList.add("tab");
   tabElement.dataset.tabId = nTab.id;
+  
+  // Font Awesome icon syntax for layout components
   tabElement.innerHTML = `
-        <img src="/assets/fav.png" id="fav" data-fav-id="${nTab.id}" width="24" alt="">
+        <img src="/assets/fav.png" id="fav" data-fav-id="${nTab.id}" alt="">
         <span>New Tab</span>
-        <i data-lucide="x" class="close-btn"></i>
+        <i class="fa-solid fa-xmark close-btn"></i>
   `;
 
   tabElement.addEventListener("click", (e) => {
@@ -105,7 +115,6 @@ function newTab() {
   });
 
   tabCont.insertBefore(tabElement, ntBtn);
-  if (window.lucide) lucide.createIcons({ parent: tabElement });
 
   const tabFrame = document.createElement("iframe");
   tabFrame.classList.add("viewframe", "browser-frame");
@@ -353,6 +362,7 @@ function f() {
   go(furl);
 }
 
+// Fixed Reload Hook
 function r() {
   const viewframe = document.querySelector(`.viewframe[data-frame-id="${aTab}"]`);
   if (viewframe) viewframe.src = viewframe.src;
@@ -383,21 +393,5 @@ async function launchEruda() {
     safeToast("success", "Successfully injected Eruda", "check-circle");
   } catch (e) {
     safeToast("error", "Failed to inject Eruda", "x-circle");
-  }
-}
-
-async function fixProxy() {
-  try {
-    await connection.setTransport("/libcurl/index.mjs", [{ websocket: wispUrl }]);
-    safeToast("success", "Connection reset to Libcurl!", "refresh-cw");
-
-    await navigator.serviceWorker.register("/sw.js");
-    safeToast("success", "Service workers reregistered. (1/2)", "check-circle");
-
-    await navigator.serviceWorker.register("/uv/sw.js");
-    safeToast("success", "Service workers reregistered. (2/2)", "check-circle");
-  } catch(e) {
-    console.error("Proxy fix sequence failed:", e);
-    safeToast("error", "Failed to clear proxy layers.", "x-circle");
   }
 }
