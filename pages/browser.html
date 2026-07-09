@@ -10,11 +10,12 @@
     <link rel="stylesheet" href="/assets/css/browser.css">
     <link rel="stylesheet" href="/assets/css/colors.css" id="css-theme-link">
     <link rel="stylesheet" href="/assets/css/font.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <script src="/assets/js/t.js"></script>
     <script src="/baremux/index.js"></script>
     <script src="/assets/js/color.js"></script>
     <script src="/homework/math.all.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/lucide.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/eruda@3.4.3/eruda.min.js"></script>
     <script>
         async function swium() {
@@ -31,7 +32,6 @@
 
         window.addEventListener("load", () => {
             swium();
-            if (window.lucide) setTimeout(() => lucide.createIcons(), 0);
         });
     </script>
     <script src="/assets/js/browserfunctions.js"></script>
@@ -41,17 +41,17 @@
     <div class="bottom-left" id="leftPanel">
       <div class="nav-modal" id="navModal">
         <button class="home-toggle" id="navToggle" type="button">
-          <span class="home-icon"><i data-lucide="house"></i></span>
+          <span class="home-icon"><i class="fa-solid fa-house"></i></span>
           <span class="home-label">Home</span>
         </button>
         <div class="nav-items">
-          <a class="nav-item" href="/index.html"><i data-lucide="house"></i><span>Home</span></a>
-          <a class="nav-item" href="/pages/ai.html"><i data-lucide="brain-circuit"></i><span>AI</span></a>
-          <a class="nav-item" href="/pages/chat.html"><i data-lucide="messages-square"></i><span>Chat</span></a>
-          <a class="nav-item" href="/pages/watch.html"><i data-lucide="eye"></i><span>Watch</span></a>
-          <a class="nav-item" href="/pages/music.html"><i data-lucide="music"></i><span>Music</span></a>
-          <a class="nav-item" href="/pages/browser.html"><i data-lucide="compass"></i><span>Browse</span></a>
-          <a class="nav-item" href="/pages/settings.html"><i data-lucide="settings"></i><span>Settings</span></a>
+          <a class="nav-item" href="/index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+          <a class="nav-item" href="/pages/ai.html"><i class="fa-solid fa-brain"></i><span>AI</span></a>
+          <a class="nav-item" href="/pages/chat.html"><i class="fa-solid fa-comments"></i><span>Chat</span></a>
+          <a class="nav-item" href="/pages/watch.html"><i class="fa-solid fa-eye"></i><span>Watch</span></a>
+          <a class="nav-item" href="/pages/music.html"><i class="fa-solid fa-music"></i><span>Music</span></a>
+          <a class="nav-item" href="/pages/browser.html"><i class="fa-solid fa-compass"></i><span>Browse</span></a>
+          <a class="nav-item" href="/pages/settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
         </div>
       </div>
     </div>
@@ -76,29 +76,29 @@
         <div class="browser-controls">
             <div class="tabs">
                 <button class="newtab" onclick="newTab()">
-                    <i data-lucide="plus"></i>
+                    <i class="fa-solid fa-plus"></i>
                 </button>
             </div>
             <div class="browser-buttons">
                 <div class="hcontainer">
                     <button onclick="b()" title="Back">
-                        <i data-lucide="chevron-left"></i>
+                        <i class="fa-solid fa-chevron-left"></i>
                     </button>
                     <button onclick="f()" title="Forward">
-                        <i data-lucide="chevron-right"></i>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </button>
                     <button onclick="r()" title="Reload">
-                        <i data-lucide="rotate-ccw"></i>
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
                     </button>
                     <input type="text" id="searchbar" placeholder="Search for anything or enter a URL...">
                     <button onclick="full()" title="Fullscreen">
-                        <i data-lucide="maximize"></i>
+                        <i class="fa-solid fa-expand"></i>
                     </button>
                     <button onclick="launchEruda()" title="Developer Tools">
-                        <i data-lucide="code"></i>
+                        <i class="fa-solid fa-code"></i>
                     </button>
                     <button onclick="location.href = '/'" title="Exit to Home">
-                        <i data-lucide="home"></i>
+                        <i class="fa-solid fa-house"></i>
                     </button>
                 </div>
             </div>
