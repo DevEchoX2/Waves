@@ -23,7 +23,11 @@ if (se === "DuckDuckGo") {
   searchE = "https://search.brave.com/search?q=";
 }
 
-connection.setTransport("/libcurl/index.mjs", [{ websocket: wispUrl }]);
+try {
+  connection.setTransport("/libcurl/index.mjs", [{ websocket: wispUrl }]);
+} catch(e) {
+  console.error("BareMux transport initialization failed:", e);
+}
 
 const CONFIG = {
   files: {
@@ -33,16 +37,29 @@ const CONFIG = {
   },
 };
 
-const { ScramjetController } = $scramjetLoadController();
-const scramjet = new ScramjetController({
-  files: CONFIG.files,
-});
-scramjet.init();
+let scramjet;
+try {
+  const { ScramjetController } = $scramjetLoadController();
+  scramjet = new ScramjetController({
+    files: CONFIG.files,
+  });
+  scramjet.init();
+} catch (e) {
+  console.error("Scramjet failed to initialize:", e);
+}
 
-// Wait for DOM to wire up searchbar events natively
+function safeToast(type, text, icon) {
+  if (typeof showToast === "function") {
+    showToast(type, text, icon);
+  } else {
+    console.log(`[Toast - ${type}]: ${text}`);
+  }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   const searchbar = document.getElementById("searchbar");
   if (searchbar) {
+    searchbar.removeAttribute('onkeydown');
     searchbar.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         nav(searchbar.value);
@@ -132,7 +149,7 @@ function switchTab(tId) {
 
 function closeTab(tId) {
   if (bTabs.length === 1) {
-    if (typeof showToast === "function") showToast("error", "Cannot close last tab!", "x-circle");
+    safeToast("error", "Cannot close last tab!", "x-circle");
     return;
   }
 
@@ -176,13 +193,20 @@ function nav(i) {
   cTab.historyIndex++;
   cTab.url = url;
 
-  let fUrl;
+  let fUrl = "";
   const backend = localStorage.getItem("cherri_backend") || "Scramjet";
   
-  if (backend.toLowerCase() === "ultraviolet") {
-    fUrl = "/uv/service/" + __uv$config.encodeUrl(url);
-  } else {
-    fUrl = scramjet.encodeUrl(url);
+  try {
+    if (backend.toLowerCase() === "ultraviolet" && typeof __uv$config !== "undefined") {
+      fUrl = "/uv/service/" + __uv$config.encodeUrl(url);
+    } else if (scramjet) {
+      fUrl = scramjet.encodeUrl(url);
+    } else {
+      fUrl = url;
+    }
+  } catch(e) {
+    console.error("Encoding failed:", e);
+    fUrl = url;
   }
 
   go(fUrl);
@@ -197,11 +221,11 @@ function updateUrlFromIframe(viewframe) {
     const currentSrc = viewframe.src;
     const backend = localStorage.getItem("cherri_backend") || "Scramjet";
 
-    if (backend.toLowerCase() === "ultraviolet") {
+    if (backend.toLowerCase() === "ultraviolet" && typeof __uv$config !== "undefined") {
       if (currentSrc.includes("/uv/service/")) {
         decodedUrl = __uv$config.decodeUrl(currentSrc.split("/uv/service/")[1]);
       }
-    } else {
+    } else if (scramjet) {
       decodedUrl = scramjet.decodeUrl(currentSrc);
     }
 
@@ -221,8 +245,12 @@ function updateUrlFromIframe(viewframe) {
 }
 
 async function go(u) {
-  if (!(await connection.getTransport())) {
-    connection.setTransport("/libcurl/index.mjs", [{ websocket: wispUrl }]);
+  try {
+    if (!(await connection.getTransport())) {
+      await connection.setTransport("/libcurl/index.mjs", [{ websocket: wispUrl }]);
+    }
+  } catch (e) {
+    console.error("Transport connection failed:", e);
   }
 
   const cTab = bTabs.find((t) => t.id === aTab);
@@ -242,8 +270,13 @@ async function go(u) {
 
   if (ubar) ubar.value = cTab.url;
   const favUrl = cTab.url;
-  if (favEl && favUrl)
-    favEl.src = `https://www.google.com/s2/favicons?domain=${favUrl}&sz=256`;
+  if (favEl && favUrl) {
+    try {
+      favEl.src = `https://www.google.com/s2/favicons?domain=${new URL(favUrl).hostname}&sz=256`;
+    } catch(_) {
+      favEl.src = "/assets/fav.png";
+    }
+  }
 
   try {
     viewframe.src = u;
@@ -260,7 +293,7 @@ async function go(u) {
 
         updateUrlFromIframe(viewframe);
       } catch (e) {
-        console.error("Error accessing iframe content:", e);
+        console.error("Error accessing iframe layout content:", e);
         if (tabEl && cTab.url) {
           const titleEl = tabEl.querySelector("span");
           try {
@@ -274,9 +307,7 @@ async function go(u) {
     };
   } catch (e) {
     console.error("There was an error while loading the page:", e);
-    if (typeof showToast === "function") {
-      showToast("error", "There was a problem loading the page.", "x-circle");
-    }
+    safeToast("error", "There was a problem loading the page.", "x-circle");
   }
 }
 
@@ -290,10 +321,12 @@ function b() {
   
   let furl;
   const ba = localStorage.getItem("cherri_backend") || "Scramjet";
-  if (ba.toLowerCase() === "ultraviolet") {
+  if (ba.toLowerCase() === "ultraviolet" && typeof __uv$config !== "undefined") {
     furl = (__uv$config.prefix || "/uv/service/") + __uv$config.encodeUrl(u);
-  } else {
+  } else if (scramjet) {
     furl = scramjet.encodeUrl(u);
+  } else {
+    furl = u;
   }
 
   go(furl);
@@ -309,10 +342,12 @@ function f() {
   
   let furl;
   const ba = localStorage.getItem("cherri_backend") || "Scramjet";
-  if (ba.toLowerCase() === "ultraviolet") {
+  if (ba.toLowerCase() === "ultraviolet" && typeof __uv$config !== "undefined") {
     furl = (__uv$config.prefix || "/uv/service/") + __uv$config.encodeUrl(u);
-  } else {
+  } else if (scramjet) {
     furl = scramjet.encodeUrl(u);
+  } else {
+    furl = u;
   }
 
   go(furl);
@@ -342,22 +377,27 @@ function hideBrowser() {
 }
 
 async function launchEruda() {
-  if (typeof showToast === "function") showToast("info", "Launching Eruda...", "zap");
+  safeToast("info", "Launching Eruda...", "zap");
   try {
     eruda.init();
-    if (typeof showToast === "function") showToast("success", "Successfully injected Eruda", "check-circle");
+    safeToast("success", "Successfully injected Eruda", "check-circle");
   } catch (e) {
-    if (typeof showToast === "function") showToast("error", "Failed to inject Eruda", "x-circle");
+    safeToast("error", "Failed to inject Eruda", "x-circle");
   }
 }
 
 async function fixProxy() {
-  await connection.setTransport("/libcurl/index.mjs", [{ websocket: wispUrl }]);
-  if (typeof showToast === "function") showToast("success", "Connection reset to Libcurl!", "refresh-cw");
+  try {
+    await connection.setTransport("/libcurl/index.mjs", [{ websocket: wispUrl }]);
+    safeToast("success", "Connection reset to Libcurl!", "refresh-cw");
 
-  await navigator.serviceWorker.register("/sw.js");
-  if (typeof showToast === "function") showToast("success", "Service workers reregistered. (1/2)", "check-circle");
+    await navigator.serviceWorker.register("/sw.js");
+    safeToast("success", "Service workers reregistered. (1/2)", "check-circle");
 
-  await navigator.serviceWorker.register("/uv/sw.js");
-  if (typeof showToast === "function") showToast("success", "Service workers reregistered. (2/2)", "check-circle");
+    await navigator.serviceWorker.register("/uv/sw.js");
+    safeToast("success", "Service workers reregistered. (2/2)", "check-circle");
+  } catch(e) {
+    console.error("Proxy fix sequence failed:", e);
+    safeToast("error", "Failed to clear proxy layers.", "x-circle");
+  }
 }
