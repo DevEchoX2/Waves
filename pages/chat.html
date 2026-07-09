@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waves | Chat</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/fav.png">
+  <link rel="stylesheet" href="/styles/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/t.css">
+  <link rel="stylesheet" href="/assets/css/dropdown.css">
+  <link rel="stylesheet" href="/assets/css/colors.css" id="css-theme-link">
+  <link rel="stylesheet" href="/assets/css/font.css">
+  <script src="/uv/uv.bundle.js"></script>
+  <script src="/uv/uv.config.js"></script>
+  <script src="/baremux/index.js"></script>
+  <script src="/homework/math.all.js"></script>
+  <script src="/assets/js/t.js" defer></script>
+  <script src="/assets/js/cursor.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <div class="bottom-left" id="leftPanel">
+      <div class="nav-modal" id="navModal">
+        <button class="home-toggle" id="navToggle" type="button">
+          <span class="home-icon"><i class="fas fa-home"></i></span>
+          <span class="home-label">Home</span>
+        </button>
+        <div class="nav-items">
+          <a class="nav-item" href="/index.html"><i class="fas fa-home"></i><span>Home</span></a>
+          <a class="nav-item" href="/pages/ai.html"><i class="fas fa-brain"></i><span>AI</span></a>
+          <a class="nav-item" href="/pages/chat.html"><i class="fas fa-comments"></i><span>Chat</span></a>
+          <a class="nav-item" href="/pages/watch.html"><i class="fas fa-eye"></i><span>Watch</span></a>
+          <a class="nav-item" href="/pages/music.html"><i class="fas fa-music"></i><span>Music</span></a>
+          <a class="nav-item" href="/pages/browser.html"><i class="fas fa-compass"></i><span>Browse</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <h1 class="main-title">Chat</h1>
+      <p class="tagline">Welcome to the Chat page.</p>
+    </div>
+  </div>
+
+  <script>
+    const navToggle = document.getElementById('navToggle');
+    const navModal = document.getElementById('navModal');
+    const leftPanel = document.getElementById('leftPanel');
+
+    navToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isActive = navModal.classList.toggle('active');
+      leftPanel.classList.toggle('open', isActive);
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!navToggle.contains(e.target) && !navModal.contains(e.target)) {
+        navModal.classList.remove('active');
+        leftPanel.classList.remove('open');
+      }
+    });
+  </script>
+</body>
+</html>

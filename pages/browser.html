@@ -35,11 +35,46 @@
         });
     </script>
     <script src="/assets/js/browserfunctions.js"></script>
+    <script>
+      const navToggle = document.getElementById('navToggle');
+      const navModal = document.getElementById('navModal');
+      const leftPanel = document.getElementById('leftPanel');
+
+      navToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isActive = navModal.classList.toggle('active');
+        leftPanel.classList.toggle('open', isActive);
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!navToggle.contains(e.target) && !navModal.contains(e.target)) {
+          navModal.classList.remove('active');
+          leftPanel.classList.remove('open');
+        }
+      });
+    </script>
 </head>
 
 <body>
+    <div class="bottom-left" id="leftPanel">
+      <div class="nav-modal" id="navModal">
+        <button class="home-toggle" id="navToggle" type="button">
+          <span class="home-icon"><i class="fas fa-home"></i></span>
+          <span class="home-label">Home</span>
+        </button>
+        <div class="nav-items">
+          <a class="nav-item" href="/index.html"><i class="fas fa-home"></i><span>Home</span></a>
+          <a class="nav-item" href="/pages/ai.html"><i class="fas fa-brain"></i><span>AI</span></a>
+          <a class="nav-item" href="/pages/chat.html"><i class="fas fa-comments"></i><span>Chat</span></a>
+          <a class="nav-item" href="/pages/watch.html"><i class="fas fa-eye"></i><span>Watch</span></a>
+          <a class="nav-item" href="/pages/music.html"><i class="fas fa-music"></i><span>Music</span></a>
+          <a class="nav-item" href="/pages/browser.html"><i class="fas fa-compass"></i><span>Browse</span></a>
+        </div>
+      </div>
+    </div>
+
     <div class="nav-logo">
-        <img src="/assets/img/fav.png" alt="" onclick="
+        <img src="/assets/fav.png" alt="" onclick="
             ul.classList.add('active');
             const blurr = document.createElement('div')
             blurr.classList.add('bluroverlay')

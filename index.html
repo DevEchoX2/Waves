@@ -4,19 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Waves</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/fav.png">
   <link rel="stylesheet" href="styles/index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/t.css">
+  <link rel="stylesheet" href="/assets/css/dropdown.css">
+  <link rel="stylesheet" href="/assets/css/colors.css" id="css-theme-link">
+  <link rel="stylesheet" href="/assets/css/font.css">
+  <script src="/uv/uv.bundle.js"></script>
+  <script src="/uv/uv.config.js"></script>
+  <script src="/baremux/index.js"></script>
+  <script src="/homework/math.all.js"></script>
+  <script src="/assets/js/t.js" defer></script>
+  <script src="/assets/js/cursor.js" defer></script>
 </head>
 <body>
   <div class="container">
     <div class="status-bar">
       <div class="status-item">
-        <i class="fas fa-cloud"></i>
-        <span>no°</span>
+        <i class="fas fa-clock"></i>
+        <span id="timeDisplay">--:--</span>
       </div>
       <div class="status-item">
-        <i class="fas fa-battery-full"></i>
-        <span>no</span>
+        <i class="fas fa-battery-full" id="batteryIcon"></i>
+        <span id="batteryDisplay">100%</span>
       </div>
       <div class="status-item">
         <span>no</span>
@@ -28,40 +39,43 @@
       <p class="tagline">hitting the breaks with this one</p>
     </div>
 
-    <div class="bottom-left">
-      <button class="home-toggle" id="navToggle">
-        <i class="fas fa-home"></i>
-      </button>
-      <nav class="nav-modal" id="navModal">
-        <div class="nav-item">
-          <i class="fas fa-user"></i>
-          <span>Account</span>
+    <div class="bottom-left" id="leftPanel">
+      <div class="nav-modal" id="navModal">
+        <button class="home-toggle" id="navToggle" type="button">
+          <span class="home-icon"><i class="fas fa-home"></i></span>
+          <span class="home-label">Home</span>
+        </button>
+        <div class="nav-items">
+          <a class="nav-item" href="index.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </a>
+          <a class="nav-item" href="pages/ai.html">
+            <i class="fas fa-brain"></i>
+            <span>AI</span>
+          </a>
+          <a class="nav-item" href="pages/chat.html">
+            <i class="fas fa-comments"></i>
+            <span>Chat</span>
+          </a>
+          <a class="nav-item" href="pages/watch.html">
+            <i class="fas fa-eye"></i>
+            <span>Watch</span>
+          </a>
+          <a class="nav-item" href="pages/music.html">
+            <i class="fas fa-music"></i>
+            <span>Music</span>
+          </a>
+          <a class="nav-item" href="pages/browser.html">
+            <i class="fas fa-compass"></i>
+            <span>Browse</span>
+          </a>
+          <div class="nav-item">
+            <i class="fas fa-gamepad"></i>
+            <span>Games</span>
+          </div>
         </div>
-        <div class="nav-item">
-          <i class="fas fa-brain"></i>
-          <span>AI</span>
-        </div>
-        <div class="nav-item">
-          <i class="fas fa-comments"></i>
-          <span>Chat</span>
-        </div>
-        <div class="nav-item">
-          <i class="fas fa-eye"></i>
-          <span>Watch</span>
-        </div>
-        <div class="nav-item">
-          <i class="fas fa-music"></i>
-          <span>Music</span>
-        </div>
-        <div class="nav-item">
-          <i class="fas fa-compass"></i>
-          <span>Browse</span>
-        </div>
-        <div class="nav-item">
-          <i class="fas fa-gamepad"></i>
-          <span>Games</span>
-        </div>
-      </nav>
+      </div>
       <div class="utility-buttons">
         <button class="util-btn" title="Settings">
           <i class="fas fa-sliders-h"></i>
@@ -89,17 +103,54 @@
   <script>
     const navToggle = document.getElementById('navToggle');
     const navModal = document.getElementById('navModal');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const batteryDisplay = document.getElementById('batteryDisplay');
+    const batteryIcon = document.getElementById('batteryIcon');
+
+    const leftPanel = document.getElementById('leftPanel');
 
     navToggle.addEventListener('click', function(e) {
       e.stopPropagation();
-      navModal.classList.toggle('active');
+      const isActive = navModal.classList.toggle('active');
+      leftPanel.classList.toggle('open', isActive);
     });
 
     document.addEventListener('click', function(e) {
       if (!navToggle.contains(e.target) && !navModal.contains(e.target)) {
         navModal.classList.remove('active');
+        leftPanel.classList.remove('open');
       }
     });
+
+    function updateTime() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      timeDisplay.textContent = `${hours}:${minutes}`;
+    }
+
+    function updateBatteryLevel(level) {
+      const pct = Math.round(level * 100);
+      batteryDisplay.textContent = `${pct}%`;
+      if (pct > 75) batteryIcon.className = 'fas fa-battery-full';
+      else if (pct > 50) batteryIcon.className = 'fas fa-battery-three-quarters';
+      else if (pct > 25) batteryIcon.className = 'fas fa-battery-half';
+      else if (pct > 10) batteryIcon.className = 'fas fa-battery-quarter';
+      else batteryIcon.className = 'fas fa-battery-empty';
+    }
+
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    if ('getBattery' in navigator) {
+      navigator.getBattery().then(battery => {
+        updateBatteryLevel(battery.level);
+        battery.addEventListener('levelchange', () => updateBatteryLevel(battery.level));
+        battery.addEventListener('chargingchange', () => updateBatteryLevel(battery.level));
+      });
+    } else {
+      batteryDisplay.textContent = 'n/a';
+    }
   </script>
 </body>
 </html>

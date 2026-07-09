@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <link rel="stylesheet" href="../styles/index.css">
+  <link rel="stylesheet" href="/assets/css/t.css">
+  <link rel="stylesheet" href="/assets/css/dropdown.css">
+  <link rel="stylesheet" href="/assets/css/colors.css" id="css-theme-link">
+  <link rel="stylesheet" href="/assets/css/font.css">
+</head>
+<body>
+  <div class="bottom-left" id="leftPanel">
+    <div class="nav-modal" id="navModal">
+      <button class="home-toggle" id="navToggle" type="button">
+        <span class="home-icon"><i class="fas fa-home"></i></span>
+        <span class="home-label">Home</span>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="/index.html"><i class="fas fa-home"></i><span>Home</span></a>
+        <a class="nav-item" href="/pages/ai.html"><i class="fas fa-brain"></i><span>AI</span></a>
+        <a class="nav-item" href="/pages/chat.html"><i class="fas fa-comments"></i><span>Chat</span></a>
+        <a class="nav-item" href="/pages/watch.html"><i class="fas fa-eye"></i><span>Watch</span></a>
+        <a class="nav-item" href="/pages/music.html"><i class="fas fa-music"></i><span>Music</span></a>
+        <a class="nav-item" href="/pages/browser.html"><i class="fas fa-compass"></i><span>Browse</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="settings-page-content">
+    <div class="settings-sidebar vflex">
+      <div class="settings-section settings-active" onclick="switchSettingsPage('general')" data-target="general">
+        <i class="far fa-cog"></i>
+        General
+      </div>
+      <div class="settings-section" onclick="switchSettingsPage('gaming')" data-target="gaming">
+        <i class="far fa-gamepad-modern"></i>
+        Gaming
+      </div>
+      <div class="settings-section" onclick="switchSettingsPage('cloaking')" data-target="cloaks">
+        <i class="far fa-hood-cloak"></i>
+        Cloaking
+      </div>
+      <div class="settings-section" onclick="switchSettingsPage('proxy')" data-target="proxy">
+        <i class="far fa-globe"></i>
+        Proxy
+      </div>
+      <div class="settings-section" onclick="switchSettingsPage('info')" data-target="info">
+        <i class="far fa-info-circle"></i>
+        Info
+      </div>
+      <div class="settings-section" onclick="switchSettingsPage('updates')" data-target="updates">
+        <i class="far fa-bell-on"></i>
+        Updates
+      </div>
+    </div>
+
+    <div class="settings-content-container">
+      <div id="settings-general" class="settings-page settings-active">
+        <h2>Theme</h2>
+        <p>The color scheme used across the site. Some changes may require a refresh.</p>
+        <div class="theme-selector">
+          <div class="theme-selected"></div>
+          <div class="theme-options"></div>
+        </div>
+
+        <h2>Fog</h2>
+        <p>Enable or disable Vanta fog for better performance.</p>
+        <label class="switch">
+          <input id="pjs-toggle" checked onchange="updatePJS()" type="checkbox">
+          <div class="slider">
+            <div class="circle"></div>
+          </div>
+        </label>
+      </div>
+
+      <div id="settings-gaming" class="settings-page">
+        <h2>Gaming</h2>
+        <p>Gaming-specific options and settings.</p>
+      </div>
+
+      <div id="settings-cloaking" class="settings-page">
+        <h2>Cloaking</h2>
+        <p>Enable auto cloaking and hide from detection.</p>
+      </div>
+
+      <div id="settings-proxy" class="settings-page">
+        <h2>Proxy</h2>
+        <p>Proxy configuration and transport settings.</p>
+      </div>
+
+      <div id="settings-info" class="settings-page">
+        <h2>Info</h2>
+        <p>Site information and status messages.</p>
+      </div>
+
+      <div id="settings-updates" class="settings-page">
+        <h2>Updates</h2>
+        <p>Latest updates and version information.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/js/t.js" defer></script>
+  <script src="/assets/js/cursor.js" defer></script>
+  <script src="/assets/js/settings.js" defer></script>
+  <script>
+    const navToggle = document.getElementById('navToggle');
+    const navModal = document.getElementById('navModal');
+    const leftPanel = document.getElementById('leftPanel');
+
+    navToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isActive = navModal.classList.toggle('active');
+      leftPanel.classList.toggle('open', isActive);
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!navToggle.contains(e.target) && !navModal.contains(e.target)) {
+        navModal.classList.remove('active');
+        leftPanel.classList.remove('open');
+      }
+    });
+  </script>
+</body>
+</html>

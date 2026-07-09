@@ -26,17 +26,21 @@ window.addEventListener('mousemove', (event) => {
   updateCursorPosition(lastX, lastY);
 });
 
-window.addEventListener('mousedown', () => {
+window.addEventListener('mousedown', (event) => {
   isPointerDown = true;
-  customCursor.style.transform = `translate(${lastX}px, ${lastY}px) translate(-50%, -50%) scale(0.93)`;
+  customCursor.classList.add('cursor--clickable');
+  customCursor.classList.remove('cursor--idle');
+  updateCursorPosition(lastX, lastY);
+  handlePointerTarget(event);
 });
 
-window.addEventListener('mouseup', () => {
+window.addEventListener('mouseup', (event) => {
   isPointerDown = false;
+  handlePointerTarget(event);
   updateCursorPosition(lastX, lastY);
 });
 
-const pointerTargets = ['button', 'a', 'input', 'textarea', 'select', '[role="button"]'];
+const pointerTargets = ['button', 'a', 'input', 'textarea', 'select', '[role="button"]', '#fav', '[data-fav-id]'];
 
 function handlePointerTarget(event) {
   let target = event.target;

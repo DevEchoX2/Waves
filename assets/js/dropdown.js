@@ -249,7 +249,7 @@ function applyDecoy(s) {
         " was selected"
     );
     document.title = "cherri";
-    favicon.href = "/assets/img/fav.png";
+    favicon.href = "/assets/fav.png";
     return;
   } else {
     document.title = selected.title;
