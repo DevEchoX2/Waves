@@ -14,6 +14,36 @@
   <script src="/homework/math.all.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/lucide.min.js"></script>
   <script src="/assets/js/t.js" defer></script>
+  <style>
+    /* Styling for the tab search input bar */
+    .nt-search-container {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+    .nt-search-bar {
+      width: min(540px, 90%);
+      height: 46px;
+      padding: 0 20px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(15, 23, 42, 0.6);
+      color: #f8fafc;
+      outline: none;
+      font-size: 15px;
+      font-family: Inter, system-ui, sans-serif;
+      backdrop-filter: blur(10px);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .nt-search-bar:focus {
+      border-color: rgba(96, 165, 250, 0.8);
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.16);
+    }
+    .nt-search-bar::placeholder {
+      color: rgba(148, 163, 184, 0.7);
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -34,6 +64,10 @@
     <div class="main-content">
       <h1 class="main-title">Waves</h1>
       <p class="tagline">Your browser home is ready. Search or open a site to begin.</p>
+      
+      <div class="nt-search-container">
+        <input type="text" id="ntSearchbar" class="nt-search-bar" placeholder="Search or type a URL...">
+      </div>
     </div>
 
     <div class="bottom-left" id="leftPanel">
@@ -58,6 +92,22 @@
     const timeDisplay = document.getElementById('timeDisplay');
     const batteryDisplay = document.getElementById('batteryDisplay');
     const batteryIcon = document.getElementById('batteryIcon');
+    const ntSearchbar = document.getElementById('ntSearchbar');
+
+    // Handle home tab navigation routing mechanics
+    if (ntSearchbar) {
+      ntSearchbar.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && ntSearchbar.value.trim()) {
+          // Check if page is inside the browser iframe container
+          if (window.parent && typeof window.parent.nav === 'function') {
+            window.parent.nav(ntSearchbar.value);
+          } else {
+            // Fallback alternative if loaded solo outside iframe environment
+            location.href = '/pages/browser.html?q=' + encodeURIComponent(ntSearchbar.value);
+          }
+        }
+      });
+    }
 
     function updateTime() {
       const now = new Date();
