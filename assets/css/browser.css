@@ -8,6 +8,7 @@ body {
   overflow: hidden;
 }
 
+
 .browser-container {
   position: fixed;
   inset: 0;
@@ -27,7 +28,9 @@ body {
   padding: 16px 18px 12px;
   background: rgba(2, 6, 23, 0.42);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
 }
 
 .tabs {
@@ -102,17 +105,20 @@ body {
   color: rgba(148, 163, 184, 0.9);
 }
 
+/* Tabs formatting fixes */
 .tab {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
+  width: 160px;
   max-width: 220px;
-  padding: 8px 10px;
+  padding: 8px 12px;
   border-radius: 12px;
   background: rgba(15, 23, 42, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.06);
   color: var(--text, #cbd5e1);
   cursor: pointer;
+  user-select: none;
   transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
@@ -123,6 +129,7 @@ body {
 .tab.active {
   background: rgba(30, 41, 59, 0.95);
   border-color: rgba(96, 165, 250, 0.55);
+  color: #ffffff;
 }
 
 .tab img {
@@ -130,6 +137,7 @@ body {
   height: 18px;
   border-radius: 4px;
   flex-shrink: 0;
+  object-fit: contain;
 }
 
 .tab span {
@@ -145,31 +153,35 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: rgba(148, 163, 184, 0.95);
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  color: rgba(148, 163, 184, 0.7);
   flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
 }
 
 .tab .close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
   color: #f87171;
 }
 
+/* Handles full space filling beneath toolbars dynamically */
 .browser-frame {
-  position: absolute;
-  inset: 104px 12px 12px;
+  flex: 1;
+  margin: 12px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 18px;
   background: #ffffff;
   display: none;
-  z-index: 10;
   opacity: 0;
-  pointer-events: none;
   box-shadow: 0 20px 50px rgba(2, 6, 23, 0.35);
+  transition: opacity 0.22s ease-in-out;
 }
 
 .browser-frame.active {
   display: block;
   opacity: 1;
-  pointer-events: all;
 }
 
 .browser-loading {
@@ -198,8 +210,8 @@ body {
     height: 38px;
     font-size: 13px;
   }
-
+  
   .browser-frame {
-    inset: 120px 8px 8px;
+    margin: 8px;
   }
 }
