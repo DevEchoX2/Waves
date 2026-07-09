@@ -68,7 +68,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   background: rgba(15, 23, 42, 0.8);
-  color: var(--bright-text, #f8fafc);
+  color: #f8fafc;
   cursor: pointer;
   flex-shrink: 0;
   transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
@@ -89,7 +89,7 @@ body {
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(15, 23, 42, 0.72);
-  color: var(--bright-text, #f8fafc);
+  color: #f8fafc;
   outline: none;
   font-size: 14px;
   font-family: Inter, system-ui, sans-serif;
@@ -104,20 +104,24 @@ body {
   color: rgba(148, 163, 184, 0.9);
 }
 
+/* Tab placement alignment patch */
 .tab {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: 160px;
   max-width: 220px;
-  padding: 8px 12px;
+  height: 40px;
+  padding: 0 12px;
   border-radius: 12px;
   background: rgba(15, 23, 42, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  color: var(--text, #cbd5e1);
+  color: #cbd5e1;
   cursor: pointer;
   user-select: none;
-  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.18s, border-color 0.18s;
 }
 
 .tab:hover {
@@ -131,8 +135,8 @@ body {
 }
 
 .tab img {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 4px;
   flex-shrink: 0;
   object-fit: contain;
@@ -151,6 +155,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-size: 12px;
   width: 18px;
   height: 18px;
   border-radius: 4px;
@@ -181,34 +186,12 @@ body {
   opacity: 1;
 }
 
-.browser-loading {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
 @media (max-width: 780px) {
   .browser-controls {
     padding: 12px 12px 10px;
   }
-
-  .browser-buttons .hcontainer {
-    gap: 6px;
-  }
-
-  .browser-buttons button,
-  .newtab {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-  }
-
-  .browser-buttons input {
-    height: 38px;
-    font-size: 13px;
-  }
-  
-  .browser-frame {
-    margin: 8px;
-  }
+  .browser-buttons .hcontainer { gap: 6px; }
+  .browser-buttons button, .newtab { width: 38px; height: 38px; border-radius: 10px; }
+  .browser-buttons input { height: 38px; font-size: 13px; }
+  .browser-frame { margin: 8px; }
 }
